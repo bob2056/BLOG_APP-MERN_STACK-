@@ -1,0 +1,847 @@
+{
+  "info": {
+    "name": "Blog Application Backend API",
+    "description": "Production-Grade REST API Collection for Blog Application (Node.js, Express, TypeScript, MongoDB, JWT, Zod, Multer).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "BASE_URL",
+      "value": "http://localhost:5000/api",
+      "type": "string"
+    },
+    {
+      "key": "TOKEN",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.success && res.data && res.data.token) {",
+                  "    pm.environment.set('TOKEN', res.data.token);",
+                  "    pm.collectionVariables.set('TOKEN', res.data.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"username\": \"johndoe\",\n  \"email\": \"johndoe@example.com\",\n  \"password\": \"Password123!\",\n  \"bio\": \"Software developer and blogger\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}auth/register",
+              "host": ["{{BASE_URL}}auth"],
+              "path": ["register"]
+            }
+          }
+        },
+        {
+          "name": "Login (Admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.success && res.data && res.data.token) {",
+                  "    pm.environment.set('TOKEN', res.data.token);",
+                  "    pm.collectionVariables.set('TOKEN', res.data.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@blogapp.com\",\n  \"password\": \"Password123!\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}auth/login",
+              "host": ["{{BASE_URL}}auth"],
+              "path": ["login"]
+            }
+          }
+        },
+        {
+          "name": "Login (Normal User)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.success && res.data && res.data.token) {",
+                  "    pm.environment.set('TOKEN', res.data.token);",
+                  "    pm.collectionVariables.set('TOKEN', res.data.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"sarah@blogapp.com\",\n  \"password\": \"Password123!\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}auth/login",
+              "host": ["{{BASE_URL}}auth"],
+              "path": ["login"]
+            }
+          }
+        },
+        {
+          "name": "Get Current User (Me)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}auth/me",
+              "host": ["{{BASE_URL}}auth"],
+              "path": ["me"]
+            }
+          }
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"Password123!\",\n  \"newPassword\": \"NewPassword123!\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}auth/change-password",
+              "host": ["{{BASE_URL}}auth"],
+              "path": ["change-password"]
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}auth/logout",
+              "host": ["{{BASE_URL}}auth"],
+              "path": ["logout"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Users & Profiles",
+      "item": [
+        {
+          "name": "Get User Profile by Username",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE_URL}}users/sarahc",
+              "host": ["{{BASE_URL}}users"],
+              "path": ["sarahc"]
+            }
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Sarah Connor Updated\",\n  \"bio\": \"Senior Full-Stack Engineer working on scalable cloud architectures.\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}users/me",
+              "host": ["{{BASE_URL}}users"],
+              "path": ["me"]
+            }
+          }
+        },
+        {
+          "name": "Update Avatar",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "avatar",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{BASE_URL}}users/me/avatar",
+              "host": ["{{BASE_URL}}users"],
+              "path": ["me", "avatar"]
+            }
+          }
+        },
+        {
+          "name": "Get My Bookmarks",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}users/me/bookmarks?page=1&limit=10",
+              "host": ["{{BASE_URL}}users"],
+              "path": ["me", "bookmarks"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Follow User",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}users/USER_ID_HERE/follow",
+              "host": ["{{BASE_URL}}users"],
+              "path": ["USER_ID_HERE", "follow"]
+            }
+          }
+        },
+        {
+          "name": "Unfollow User",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}users/USER_ID_HERE/follow",
+              "host": ["{{BASE_URL}}users"],
+              "path": ["USER_ID_HERE", "follow"]
+            }
+          }
+        },
+        {
+          "name": "Get User Followers",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE_URL}}users/USER_ID_HERE/followers?page=1&limit=10",
+              "host": ["{{BASE_URL}}users"],
+              "path": ["USER_ID_HERE", "followers"]
+            }
+          }
+        },
+        {
+          "name": "Get User Following",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE_URL}}users/USER_ID_HERE/following?page=1&limit=10",
+              "host": ["{{BASE_URL}}users"],
+              "path": ["USER_ID_HERE", "following"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Categories",
+      "item": [
+        {
+          "name": "Get All Categories",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE_URL}}categories",
+              "host": ["{{BASE_URL}}categories"]
+            }
+          }
+        },
+        {
+          "name": "Get Category by Slug",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE_URL}}categories/web-development",
+              "host": ["{{BASE_URL}}categories"],
+              "path": ["web-development"]
+            }
+          }
+        },
+        {
+          "name": "Create Category (Admin Only)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Mobile Development\",\n  \"description\": \"Guides and tutorials on React Native, Flutter, and iOS/Android systems.\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}categories",
+              "host": ["{{BASE_URL}}categories"]
+            }
+          }
+        },
+        {
+          "name": "Upload Category Image (Admin Only)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{BASE_URL}}categories/upload-image",
+              "host": ["{{BASE_URL}}categories"],
+              "path": ["upload-image"]
+            }
+          }
+        },
+        {
+          "name": "Update Category (Admin Only)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Updated description of this category.\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}categories/CATEGORY_ID_HERE",
+              "host": ["{{BASE_URL}}categories"],
+              "path": ["CATEGORY_ID_HERE"]
+            }
+          }
+        },
+        {
+          "name": "Delete Category (Admin Only)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}categories/CATEGORY_ID_HERE",
+              "host": ["{{BASE_URL}}categories"],
+              "path": ["CATEGORY_ID_HERE"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Posts",
+      "item": [
+        {
+          "name": "Get Published Posts (Pagination & Filters)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE_URL}}posts?page=1&limit=10&sort=newest",
+              "host": ["{{BASE_URL}}posts"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" },
+                { "key": "sort", "value": "newest", "description": "newest | oldest | most_viewed" },
+                { "key": "category", "value": "web-development", "disabled": true },
+                { "key": "tag", "value": "nodejs", "disabled": true },
+                { "key": "search", "value": "api", "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Single Post by Slug",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}", "disabled": true }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}posts/building-a-rest-api-with-nodejs-and-typescript",
+              "host": ["{{BASE_URL}}posts"],
+              "path": ["building-a-rest-api-with-nodejs-and-typescript"]
+            }
+          }
+        },
+        {
+          "name": "Get My Posts (Authenticated Author)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}posts/my-posts?page=1&limit=10",
+              "host": ["{{BASE_URL}}posts"],
+              "path": ["my-posts"]
+            }
+          }
+        },
+        {
+          "name": "Upload Post Cover Image",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "coverImage",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{BASE_URL}}posts/upload-cover",
+              "host": ["{{BASE_URL}}posts"],
+              "path": ["upload-cover"]
+            }
+          }
+        },
+        {
+          "name": "Create Post",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Architecting Clean REST APIs with Node and TypeScript\",\n  \"content\": \"Comprehensive guide detailing clean architecture in Node.js, Express, and TypeScript with Zod validation.\",\n  \"excerpt\": \"Discover how to separate controllers from services and write production-grade TypeScript code.\",\n  \"category\": \"CATEGORY_ID_HERE\",\n  \"tags\": [\"nodejs\", \"typescript\", \"express\", \"backend\"],\n  \"status\": \"PUBLISHED\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}posts",
+              "host": ["{{BASE_URL}}posts"]
+            }
+          }
+        },
+        {
+          "name": "Update Post",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Architecting Clean REST APIs (Updated Edition)\",\n  \"status\": \"PUBLISHED\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}posts/POST_ID_HERE",
+              "host": ["{{BASE_URL}}posts"],
+              "path": ["POST_ID_HERE"]
+            }
+          }
+        },
+        {
+          "name": "Delete Post",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}posts/POST_ID_HERE",
+              "host": ["{{BASE_URL}}posts"],
+              "path": ["POST_ID_HERE"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Comments",
+      "item": [
+        {
+          "name": "Get Post Comments (with nested replies)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE_URL}}posts/POST_ID_HERE/comments?page=1&limit=10",
+              "host": ["{{BASE_URL}}posts"],
+              "path": ["POST_ID_HERE", "comments"]
+            }
+          }
+        },
+        {
+          "name": "Create Top-Level Comment",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"This article really helped clarify Mongoose indexing strategy!\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}posts/POST_ID_HERE/comments",
+              "host": ["{{BASE_URL}}posts"],
+              "path": ["POST_ID_HERE", "comments"]
+            }
+          }
+        },
+        {
+          "name": "Create Reply to Comment",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Glad it helped! Let me know if you have questions on compound indexes.\",\n  \"parentComment\": \"PARENT_COMMENT_ID_HERE\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}posts/POST_ID_HERE/comments",
+              "host": ["{{BASE_URL}}posts"],
+              "path": ["POST_ID_HERE", "comments"]
+            }
+          }
+        },
+        {
+          "name": "Update Comment",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Updated comment text with additional insights.\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}comments/COMMENT_ID_HERE",
+              "host": ["{{BASE_URL}}comments"],
+              "path": ["COMMENT_ID_HERE"]
+            }
+          }
+        },
+        {
+          "name": "Delete Comment",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}comments/COMMENT_ID_HERE",
+              "host": ["{{BASE_URL}}comments"],
+              "path": ["COMMENT_ID_HERE"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Likes & Bookmarks",
+      "item": [
+        {
+          "name": "Like Post",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}posts/POST_ID_HERE/like",
+              "host": ["{{BASE_URL}}posts"],
+              "path": ["POST_ID_HERE", "like"]
+            }
+          }
+        },
+        {
+          "name": "Unlike Post",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}posts/POST_ID_HERE/like",
+              "host": ["{{BASE_URL}}posts"],
+              "path": ["POST_ID_HERE", "like"]
+            }
+          }
+        },
+        {
+          "name": "Get Post Likes",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}", "disabled": true }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}posts/POST_ID_HERE/likes",
+              "host": ["{{BASE_URL}}posts"],
+              "path": ["POST_ID_HERE", "likes"]
+            }
+          }
+        },
+        {
+          "name": "Bookmark Post",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}posts/POST_ID_HERE/bookmark",
+              "host": ["{{BASE_URL}}posts"],
+              "path": ["POST_ID_HERE", "bookmark"]
+            }
+          }
+        },
+        {
+          "name": "Unbookmark Post",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}posts/POST_ID_HERE/bookmark",
+              "host": ["{{BASE_URL}}posts"],
+              "path": ["POST_ID_HERE", "bookmark"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Search & Tags",
+      "item": [
+        {
+          "name": "Search Posts",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE_URL}}search/posts?q=javascript&page=1&limit=10",
+              "host": ["{{BASE_URL}}search"],
+              "path": ["posts"],
+              "query": [
+                { "key": "q", "value": "javascript" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Filter Posts by Tag",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE_URL}}posts?tag=mongodb&page=1&limit=10",
+              "host": ["{{BASE_URL}}posts"],
+              "query": [
+                { "key": "tag", "value": "mongodb" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. Admin Dashboard",
+      "item": [
+        {
+          "name": "Get All Users (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}admin/users?page=1&limit=10",
+              "host": ["{{BASE_URL}}admin"],
+              "path": ["users"]
+            }
+          }
+        },
+        {
+          "name": "Update User Status (Admin)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isActive\": false\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}admin/users/USER_ID_HERE/status",
+              "host": ["{{BASE_URL}}admin"],
+              "path": ["users", "USER_ID_HERE", "status"]
+            }
+          }
+        },
+        {
+          "name": "Delete User (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}admin/users/USER_ID_HERE",
+              "host": ["{{BASE_URL}}admin"],
+              "path": ["users", "USER_ID_HERE"]
+            }
+          }
+        },
+        {
+          "name": "Get All Posts (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}admin/posts?page=1&limit=10",
+              "host": ["{{BASE_URL}}admin"],
+              "path": ["posts"]
+            }
+          }
+        },
+        {
+          "name": "Delete Post (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}admin/posts/POST_ID_HERE",
+              "host": ["{{BASE_URL}}admin"],
+              "path": ["posts", "POST_ID_HERE"]
+            }
+          }
+        },
+        {
+          "name": "Get All Comments (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}admin/comments?page=1&limit=10",
+              "host": ["{{BASE_URL}}admin"],
+              "path": ["comments"]
+            }
+          }
+        },
+        {
+          "name": "Delete Comment (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{TOKEN}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}admin/comments/COMMENT_ID_HERE",
+              "host": ["{{BASE_URL}}admin"],
+              "path": ["comments", "COMMENT_ID_HERE"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "9. System Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE_URL}}health",
+              "host": ["{{BASE_URL}}health"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

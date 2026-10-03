@@ -1,0 +1,13 @@
+{
+  "name": "blog-app-mern-stack",
+  "version": "1.0.0",
+  "description": "Full-stack MERN Blog Application with Next.js 14 and Express TypeScript",
+  "private": true,
+  "scripts": {
+    "backend": "npm run dev --prefix BACKENED",
+    "backend:start": "npm start --prefix BACKENED",
+    "frontend": "npm run dev --prefix FRONTED",
+    "frontend:build": "npm run build --prefix FRONTED",
+    "seed": "npm run seed --prefix BACKENED"
+  }
+}
